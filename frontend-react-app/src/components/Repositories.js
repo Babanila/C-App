@@ -1,9 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 
+// Stateless Functional Component
 const Repositories = props => {
   const [repositories, setRepositories] = useState([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const url = `http://localhost:5000/repository/${props.query}`;
     const getRepo = async () => {
