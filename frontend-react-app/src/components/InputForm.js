@@ -35,7 +35,13 @@ export default class InputForm extends React.Component {
       ? (newUrl = `${this.state.endpoint}`)
       : (newUrl = `${this.state.endpoint}${this.state.searchParams}`);
 
-    this.setState({ url: newUrl });
+    this.setState({
+      url: newUrl,
+      repositories: this.outputResults(
+        this.state.searchParams,
+        this.state.endpoint
+      )
+    });
   }
 
   outputResults() {
@@ -50,7 +56,7 @@ export default class InputForm extends React.Component {
     if (endpoint === "http://localhost:5000/repository/") {
       return (
         <div>
-          <Repositories query={searchParams} onChange={this.handleSubmit} />
+          <Repositories query={searchParams} onSubmit={this.handleSubmit} />
         </div>
       );
     } else if (endpoint === "http://localhost:5000/repository_id/") {
@@ -69,7 +75,6 @@ export default class InputForm extends React.Component {
   }
 
   render() {
-    const { searchParams, endpoint } = this.state;
     return (
       <div>
         <div>
@@ -108,7 +113,7 @@ export default class InputForm extends React.Component {
         </div>
         <div>
           <h4> {this.state.endpoint}</h4>
-          <div>{this.outputResults(searchParams, endpoint)}</div>
+          <div>{this.state.repositories}</div>
         </div>
       </div>
     );

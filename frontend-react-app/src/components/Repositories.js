@@ -1,33 +1,23 @@
-import React, { Component, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 
-export default class Repositories extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: true,
-      repositories: []
+const Repositories = props => {
+  const [repositories, setRepositories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const url = `http://localhost:5000/repository/${props.query}`;
+    const getRepo = async () => {
+      try {
+        const { data } = await axios.get(url);
+        setRepositories(data.items);
+        setLoading(false);
+      } catch (_) {}
     };
-  }
+    getRepo();
+  }, [props.query]);
 
-  async componentDidMount() {
-    const { query } = this.props;
-    const { data } = await axios.get(
-      `http://localhost:5000/repository/${query}`
-    );
-
-    this.setState({
-      repositories: data,
-      loading: false
-    });
-  }
-
-  render() {
-    if (this.state.loading) return <h5> Loading ...</h5>;
-    if (!this.state.repositories) return <h5>No repository is available</h5>;
-
-    const repos = this.state.repositories.items.map((item, i) => {
+  const repos = items =>
+    items.map((item, i) => {
       return (
         <Fragment key={item.id}>
           <p> </p>
@@ -43,19 +33,12 @@ export default class Repositories extends Component {
         </Fragment>
       );
     });
-    return (
-      <>
-        <>
-          <h3>Total: {this.state.repositories.total_count}</h3>
-        </>
-        <>
-          <h3>
-            Incomplete_results: {this.state.repositories.incomplete_results}
-            {this.state.visible}
-          </h3>
-        </>
-        <>{repos}</>
-      </>
-    );
-  }
-}
+
+  return (
+    <div onSubmit={e => this.onSubmit(e)}>
+      {loading ? <h5> Loading ...</h5> : <>{repos(repositories)}</>}
+    </div>
+  );
+};
+
+export default Repositories;
