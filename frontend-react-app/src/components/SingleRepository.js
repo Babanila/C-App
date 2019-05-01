@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import axios from "axios";
 
 export default class SingleRepository extends Component {
@@ -28,18 +28,18 @@ export default class SingleRepository extends Component {
     } catch (_) {}
   };
 
-  singleRepo = repository => (
-    <Fragment key={repository.id}>
-      <ul>
-        <li>id: {repository.id}</li>
-        <li>node_id: {repository.node_id}</li>
-        <li>name: {repository.name}</li>
-        <li>private: {repository.private}</li>
-        <li>description: {repository.description}</li>
-        <li>url: {repository.url}</li>
-      </ul>
-    </Fragment>
-  );
+  singleRepo = items =>
+    Object.entries(items).map(([k, value], i) => {
+      return typeof value !== "object" ? (
+        <div key={k + i} className="list-group-item">
+          <strong>{k}</strong>: {value}
+        </div>
+      ) : (
+        <div key={k + i} className="list-group-item">
+          <strong>{k}</strong>: {typeof value}
+        </div>
+      );
+    });
 
   render() {
     const { repository, loading } = this.state;
@@ -49,7 +49,7 @@ export default class SingleRepository extends Component {
         {loading ? (
           <h5>Loading ......</h5>
         ) : (
-          <div>{this.singleRepo(repository)}</div>
+          <div className="list-group">{this.singleRepo(repository)}</div>
         )}
       </div>
     );
