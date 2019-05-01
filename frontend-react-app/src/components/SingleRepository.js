@@ -7,29 +7,26 @@ export default class SingleRepository extends Component {
     repository: []
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.getData(this.props);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.id !== prevProps.id) {
+      this.getData(this.props);
+    }
+  }
+
+  getData = async ({ id }) => {
     try {
-      const url = `http://localhost:5000/repository_id/${this.props.id}`;
+      const url = `http://localhost:5000/repository_id/${id}`;
       const { data } = await axios.get(url);
       this.setState({
         repository: data,
         loading: false
       });
     } catch (_) {}
-  }
-
-  async componentDidUpdate(prevProps) {
-    if (this.props.id !== prevProps.id) {
-      try {
-        const url = `http://localhost:5000/repository_id/${this.props.id}`;
-        const { data } = await axios.get(url);
-        this.setState({
-          repository: data,
-          loading: false
-        });
-      } catch (_) {}
-    }
-  }
+  };
 
   singleRepo = repository => (
     <Fragment key={repository.id}>
