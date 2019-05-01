@@ -2,44 +2,59 @@ import React, { Component, Fragment } from "react";
 import axios from "axios";
 
 export default class SingleRepository extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: true,
-      repository: []
-    };
-  }
+  state = {
+    loading: true,
+    repository: []
+  };
 
   async componentDidMount() {
-    const { id } = this.props;
-    const { data } = await axios.get(
-      `http://localhost:5000/repository_id/${id}`
-    );
-
-    this.setState({
-      loading: false,
-      repository: data
-    });
+    try {
+      const url = `http://localhost:5000/repository_id/${this.props.id}`;
+      const { data } = await axios.get(url);
+      this.setState({
+        repository: data,
+        loading: false
+      });
+    } catch (_) {}
   }
 
-  render() {
-    if (this.state.repository.length === 0) return <h5>No repository found</h5>;
+  async componentDidUpdate(prevProps) {
+    if (this.props.id !== prevProps.id) {
+      try {
+        const url = `http://localhost:5000/repository_id/${this.props.id}`;
+        const { data } = await axios.get(url);
+        this.setState({
+          repository: data,
+          loading: false
+        });
+      } catch (_) {}
+    }
+  }
 
-    const repoData = this.state.repository;
+  singleRepo = repository => (
+    <Fragment key={repository.id}>
+      <ul>
+        <li>id: {repository.id}</li>
+        <li>node_id: {repository.node_id}</li>
+        <li>name: {repository.name}</li>
+        <li>private: {repository.private}</li>
+        <li>description: {repository.description}</li>
+        <li>url: {repository.url}</li>
+      </ul>
+    </Fragment>
+  );
+
+  render() {
+    const { repository, loading } = this.state;
     return (
-      <Fragment key={repoData.id}>
-        <p> </p>
+      <div>
         <h4> Repository </h4>
-        <ul>
-          <li>id: {repoData.id}</li>
-          <li>node_id: {repoData.node_id}</li>
-          <li>name: {repoData.name}</li>
-          <li>private: {repoData.private}</li>
-          <li>description: {repoData.description}</li>
-          <li>url: {repoData.url}</li>
-        </ul>
-      </Fragment>
+        {loading ? (
+          <h5>Loading ......</h5>
+        ) : (
+          <div>{this.singleRepo(repository)}</div>
+        )}
+      </div>
     );
   }
 }

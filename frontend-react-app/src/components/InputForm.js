@@ -56,25 +56,26 @@ export default class InputForm extends React.Component {
     if (endpoint === "http://localhost:5000/repository/") {
       return (
         <div>
-          <Repositories query={searchParams} onSubmit={this.handleSubmit} />
+          <Repositories query={searchParams} />
         </div>
       );
     } else if (endpoint === "http://localhost:5000/repository_id/") {
       return (
         <div>
-          <SingleRepository id={searchParams} onChange={this.handleSubmit} />
+          <SingleRepository id={searchParams} />
         </div>
       );
     } else {
       return (
         <div>
-          <SavedRepositories onChange={this.handleSubmit} />
+          <SavedRepositories />
         </div>
       );
     }
   }
 
   render() {
+    const { value, endpoint, repositories } = this.state;
     return (
       <div>
         <div>
@@ -83,7 +84,7 @@ export default class InputForm extends React.Component {
             <select
               name="endpoint"
               className="form-select"
-              value={this.state.value}
+              value={value}
               onChange={this.handleInputChange}
             >
               <option value="" />
@@ -104,7 +105,7 @@ export default class InputForm extends React.Component {
               className="form-control"
               placeholder="Enter your search parameter"
               name="searchParams"
-              value={this.state.value}
+              value={value}
               onChange={this.handleInputChange}
             />
             <br />
@@ -112,8 +113,8 @@ export default class InputForm extends React.Component {
           </form>
         </div>
         <div>
-          <h4> {this.state.endpoint}</h4>
-          <div>{this.state.repositories}</div>
+          <h4> {endpoint}</h4>
+          <div>{repositories}</div>
         </div>
       </div>
     );
