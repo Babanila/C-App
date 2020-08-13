@@ -7,14 +7,14 @@ cache:
 matrix:
   fast_finish: true
   include:
-    - env: ECMAScript
+    - env:
       before_script:
         - cd ${TRAVIS_BUILD_DIR}/backend-node-api
         - npm install
       script:
         - npm test
         - npm run build
-    - env: TypeScript
+    - env:
       before_script:
         - cd ${TRAVIS_BUILD_DIR}/frontend-react-app
         - npm install
