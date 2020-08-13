@@ -4,7 +4,12 @@
   "description": "This API can be used to search for Github repositories.",
   "main": "backendApp.js",
   "scripts": {
-    "test": "jest"
+    "start": "node backendApp.js",
+    "start:watch": "nodemon backendApp.js",
+    "build": "npm install",
+    "debug": "node $NODE_DEBUG_OPTION ./backendApp.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "author": "Babajide Williams",
   "license": "ISC",
